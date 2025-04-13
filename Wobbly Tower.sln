@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wobbly Tower", "Wobbly Tower.csproj", "{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{C78510AB-F2A8-4B5D-80A7-61DB39842FEB}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
