@@ -8,10 +8,11 @@ public class TowerBlock : RigidBody
 {
 	private MeshInstance _blockMesh;
 	private Material _blockMaterial;
-	private ResourcePreloader _resourcePreloader = new ResourcePreloader();
+	private ResourcePreloader _resourcePreloader;
 
 	public override void _Ready()
 	{
+		_resourcePreloader = NodeExtractionHelper.GetChild<MainResourcePreloader>(GetParent());
 		var block = GetRandomBlock();
 
 		_blockMaterial = GetRandomMaterial();
@@ -23,11 +24,10 @@ public class TowerBlock : RigidBody
 
 	private Node GetRandomBlock()
 	{
-		var blockShapes =_resourcePreloader.GetResourceList()
-			.Where(r => r.StartsWith("tower_block"))
+		var blockShapes = _resourcePreloader.GetResourceList()
+			.Where(r => r.Contains("tower_block"))
 			.ToArray();
 
-		GD.Print(blockShapes.Length);
 		var random = new Random();
 		var selectedBlock = random.Next(0, blockShapes.Length);
 		var blockScene = (PackedScene)GD.Load(blockShapes[selectedBlock]);
@@ -38,7 +38,7 @@ public class TowerBlock : RigidBody
 	private Material GetRandomMaterial()
 	{
 		var materialFiles = _resourcePreloader.GetResourceList()
-			.Where(r => r.StartsWith("block_material"))
+			.Where(r => r.Contains("block_material"))
 			.ToArray();
 
 		var random = new Random();

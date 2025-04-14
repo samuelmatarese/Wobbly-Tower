@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://GameObjects/Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://GameObjects/TowerBlock/TowerBlock.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Main/MainResourcePreloader.cs" type="Script" id=4]
 
 [node name="Spatial" type="Spatial"]
+
+[node name="ResourcePreloader" type="ResourcePreloader" parent="."]
+script = ExtResource( 4 )
 
 [node name="CSGBox" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.57798, 0 )
@@ -21,4 +25,3 @@ transform = Transform( 1, 0, 0, 0, 0.939136, 0.343545, 0, -0.343545, 0.939136, 0
 
 [node name="RigidBody" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.98303, 0 )
-_resourcePreloader = null
