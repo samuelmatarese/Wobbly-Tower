@@ -21,3 +21,4 @@ transform = Transform( 1, 0, 0, 0, 0.939136, 0.343545, 0, -0.343545, 0.939136, 0
 
 [node name="RigidBody" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.98303, 0 )
+_resourcePreloader = null
