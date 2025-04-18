@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Godot;
+using WobblyTower.Constants;
 using WobblyTower.Helpers;
 
 public class TowerBlock : RigidBody
@@ -9,9 +10,14 @@ public class TowerBlock : RigidBody
 	private Material _blockMaterial;
 	private ResourcePreloader _resourcePreloader;
 	private Resource _holdSymbol;
+	private bool _canDrag = false;
+	private bool _isDragging = false;
+	private Camera _camera;
+	private Plane _dragPlane;
 
 	public override void _Ready()
 	{
+		_camera = GetViewport().GetCamera();
 		_resourcePreloader = NodeExtractionHelper.GetChild<MainResourcePreloader>(GetParent());
 		_holdSymbol = GD.Load<Resource>("res://Assets/Symbols/hold.svg");
 		var block = GetRandomBlock();
@@ -28,15 +34,47 @@ public class TowerBlock : RigidBody
 		AddChild(collision);
 	}
 
+	public override void _PhysicsProcess(float delta)
+	{
+		if ((_canDrag || _isDragging) && Input.IsActionPressed(InputKeys.Interact))
+		{
+			if (!_isDragging)
+			{
+				Vector3 cameraForward = _camera.GlobalTransform.basis.z.Normalized();
+				_isDragging = true;
+				_dragPlane = new Plane(cameraForward, GlobalTransform.origin.y);
+				Mode = ModeEnum.Kinematic;
+			}
+
+			Vector2 mousePos = GetViewport().GetMousePosition();
+			Vector3 rayOrigin = _camera.ProjectRayOrigin(mousePos);
+			Vector3 rayDirection = _camera.ProjectRayNormal(mousePos);
+			Vector3? intersection = _dragPlane.IntersectRay(rayOrigin, rayDirection);
+
+			if (intersection != null)
+			{
+				Transform = new Transform(GlobalTransform.basis, intersection.Value);
+			}
+		}
+		else if (_isDragging)
+		{
+			_isDragging = false;
+			Mode = ModeEnum.Rigid;
+			GravityScale = 1f;
+			LinearVelocity = Vector3.Zero;
+		}
+	}
+
 	private void OnRigidBodyMouseEntered()
 	{
-		GD.Print("Mouse Entered");
+		_canDrag = true;
 		Input.SetCustomMouseCursor(_holdSymbol);
 	}
 
 
 	private void OnRigidBodyMouseExited()
 	{
+		_canDrag = false;
 		Input.SetCustomMouseCursor(null);
 	}
 
