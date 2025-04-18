@@ -8,16 +8,18 @@ public class TowerBlock : RigidBody
 	private MeshInstance _blockMesh;
 	private Material _blockMaterial;
 	private ResourcePreloader _resourcePreloader;
+	private Resource _holdSymbol;
 
 	public override void _Ready()
 	{
 		_resourcePreloader = NodeExtractionHelper.GetChild<MainResourcePreloader>(GetParent());
+		_holdSymbol = GD.Load<Resource>("res://Assets/Symbols/hold.svg");
 		var block = GetRandomBlock();
 
 		_blockMaterial = GetRandomMaterial();
 		_blockMesh = NodeExtractionHelper.GetChild<MeshInstance>(block);
 		_blockMesh.MaterialOverride = _blockMaterial;
-		var shape =_blockMesh.Mesh.CreateConvexShape();
+		var shape = _blockMesh.Mesh.CreateConvexShape();
 		var collision = new CollisionShape { Shape = shape };
 
 		// Remove default collider
@@ -25,6 +27,19 @@ public class TowerBlock : RigidBody
 		AddChild(_blockMesh.Duplicate());
 		AddChild(collision);
 	}
+
+	private void OnRigidBodyMouseEntered()
+	{
+		GD.Print("Mouse Entered");
+		Input.SetCustomMouseCursor(_holdSymbol);
+	}
+
+
+	private void OnRigidBodyMouseExited()
+	{
+		Input.SetCustomMouseCursor(null);
+	}
+
 
 	private Node GetRandomBlock()
 	{
