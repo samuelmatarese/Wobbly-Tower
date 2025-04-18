@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using Godot;
 using WobblyTower.Helpers;
@@ -18,8 +17,13 @@ public class TowerBlock : RigidBody
 		_blockMaterial = GetRandomMaterial();
 		_blockMesh = NodeExtractionHelper.GetChild<MeshInstance>(block);
 		_blockMesh.MaterialOverride = _blockMaterial;
+		var shape =_blockMesh.Mesh.CreateConvexShape();
+		var collision = new CollisionShape { Shape = shape };
 
-		AddChild(block);
+		// Remove default collider
+		RemoveChild(GetChild(0));
+		AddChild(_blockMesh.Duplicate());
+		AddChild(collision);
 	}
 
 	private Node GetRandomBlock()
