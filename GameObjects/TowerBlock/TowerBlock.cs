@@ -86,7 +86,7 @@ public class TowerBlock : RigidBody
 		{
 			if (!_isDragging)
 			{
-				Vector3 cameraForward = _camera.GlobalTransform.basis.z.Normalized();
+				var cameraForward = _camera.GlobalTransform.basis.z.Normalized();
 				_isDragging = true;
 				_dragPlane = new Plane(cameraForward, GlobalTransform.origin.y);
 				Mode = ModeEnum.Kinematic;
