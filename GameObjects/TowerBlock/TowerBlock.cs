@@ -17,6 +17,7 @@ public class TowerBlock : RigidBody
 
 	public override void _Ready()
 	{
+		Rotation = Vector3.Zero;
 		_camera = GetViewport().GetCamera();
 		_resourcePreloader = NodeExtractionHelper.GetChild<MainResourcePreloader>(GetParent());
 		_holdSymbol = GD.Load<Resource>("res://Assets/Symbols/hold.svg");
@@ -36,32 +37,11 @@ public class TowerBlock : RigidBody
 
 	public override void _PhysicsProcess(float delta)
 	{
-		if ((_canDrag || _isDragging) && Input.IsActionPressed(InputKeys.Interact))
-		{
-			if (!_isDragging)
-			{
-				Vector3 cameraForward = _camera.GlobalTransform.basis.z.Normalized();
-				_isDragging = true;
-				_dragPlane = new Plane(cameraForward, GlobalTransform.origin.y);
-				Mode = ModeEnum.Kinematic;
-			}
+		ProcessDragging();
 
-			Vector2 mousePos = GetViewport().GetMousePosition();
-			Vector3 rayOrigin = _camera.ProjectRayOrigin(mousePos);
-			Vector3 rayDirection = _camera.ProjectRayNormal(mousePos);
-			Vector3? intersection = _dragPlane.IntersectRay(rayOrigin, rayDirection);
-
-			if (intersection != null)
-			{
-				Transform = new Transform(GlobalTransform.basis, intersection.Value);
-			}
-		}
-		else if (_isDragging)
+		if (_isDragging)
 		{
-			_isDragging = false;
-			Mode = ModeEnum.Rigid;
-			GravityScale = 1f;
-			LinearVelocity = Vector3.Zero;
+			ProcessRotation();
 		}
 	}
 
@@ -76,6 +56,59 @@ public class TowerBlock : RigidBody
 	{
 		_canDrag = false;
 		Input.SetCustomMouseCursor(null);
+	}
+
+	private void ProcessRotation()
+	{
+		if (Input.IsActionJustPressed(InputKeys.BlockRotateUp))
+		{
+			Rotation = new Vector3(Rotation.x, Rotation.y, 0);
+			RotateX(90);
+		}
+		else if (Input.IsActionJustPressed(InputKeys.BlockRotateDown))
+		{
+			Rotation = new Vector3(Rotation.x, Rotation.y, 0);
+			RotateX(-90);
+		}
+		else if (Input.IsActionJustPressed(InputKeys.BlockRotateLeft))
+		{
+			RotateY(90);
+		}
+		else if (Input.IsActionJustPressed(InputKeys.BlockRotateRight))
+		{
+			RotateY(-90);
+		}
+	}
+
+	private void ProcessDragging()
+	{
+		if ((_canDrag || _isDragging) && Input.IsActionPressed(InputKeys.Interact))
+		{
+			if (!_isDragging)
+			{
+				Vector3 cameraForward = _camera.GlobalTransform.basis.z.Normalized();
+				_isDragging = true;
+				_dragPlane = new Plane(cameraForward, GlobalTransform.origin.y);
+				Mode = ModeEnum.Kinematic;
+			}
+
+			var mousePos = GetViewport().GetMousePosition();
+			var rayOrigin = _camera.ProjectRayOrigin(mousePos);
+			var rayDirection = _camera.ProjectRayNormal(mousePos);
+			var intersection = _dragPlane.IntersectRay(rayOrigin, rayDirection);
+
+			if (intersection != null)
+			{
+				Transform = new Transform(GlobalTransform.basis, intersection.Value);
+			}
+		}
+		else if (_isDragging)
+		{
+			_isDragging = false;
+			Mode = ModeEnum.Rigid;
+			GravityScale = 1f;
+			LinearVelocity = Vector3.Zero;
+		}
 	}
 
 
