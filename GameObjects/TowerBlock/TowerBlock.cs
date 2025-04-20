@@ -7,6 +7,7 @@ using WobblyTower.Helpers;
 public class TowerBlock : RigidBody
 {
 	private MeshInstance _blockMesh;
+	private Main _mainScene;
 	private Material _blockMaterial;
 	private ResourcePreloader _resourcePreloader;
 	private Resource _holdSymbol;
@@ -18,6 +19,7 @@ public class TowerBlock : RigidBody
 	public override void _Ready()
 	{
 		Rotation = Vector3.Zero;
+		_mainScene = NodeExtractionHelper.GetParent<Main>(this);
 		_camera = GetViewport().GetCamera();
 		_resourcePreloader = NodeExtractionHelper.GetChild<MainResourcePreloader>(GetParent());
 		_holdSymbol = GD.Load<Resource>("res://Assets/Symbols/hold.svg");
@@ -82,10 +84,13 @@ public class TowerBlock : RigidBody
 
 	private void ProcessDragging()
 	{
-		if ((_canDrag || _isDragging) && Input.IsActionPressed(InputKeys.Interact))
+		if ((_canDrag || _isDragging) 
+		&& Input.IsActionPressed(InputKeys.Interact)
+		&& (_mainScene.SelectedTowerBlock == null || _mainScene.SelectedTowerBlock == this))
 		{
 			if (!_isDragging)
 			{
+				_mainScene.SelectedTowerBlock = this;
 				var cameraForward = _camera.GlobalTransform.basis.z.Normalized();
 				_isDragging = true;
 				_dragPlane = new Plane(cameraForward, GlobalTransform.origin.y);
@@ -99,15 +104,15 @@ public class TowerBlock : RigidBody
 
 			if (intersection != null)
 			{
-				Transform = new Transform(GlobalTransform.basis, intersection.Value);
+				GlobalTranslation = intersection.Value;
 			}
 		}
 		else if (_isDragging)
 		{
+			_mainScene.SelectedTowerBlock = null;
 			_isDragging = false;
 			Mode = ModeEnum.Rigid;
-			GravityScale = 1f;
-			LinearVelocity = Vector3.Zero;
+			ApplyCentralImpulse(Vector3.Down);
 		}
 	}
 
