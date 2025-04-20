@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://GameObjects/Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://GameObjects/TowerBlock/TowerBlock.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Main/Main.cs" type="Script" id=3]
 [ext_resource path="res://Scenes/Main/MainResourcePreloader.cs" type="Script" id=4]
+[ext_resource path="res://GameObjects/BlockCreator/BlockCreator.tscn" type="PackedScene" id=5]
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 3 )
@@ -14,8 +14,8 @@ script = ExtResource( 4 )
 [node name="CSGBox" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.57798, 0 )
 use_collision = true
-width = 9.98554
-depth = 9.93699
+width = 34.3692
+depth = 32.8142
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.993512, 0.113723, 0, -0.113723, 0.993512, 0, 0, 0, 1, 4.36295, 12.3627, 0 )
@@ -25,5 +25,5 @@ transform = Transform( 0.993512, 0.113723, 0, -0.113723, 0.993512, 0, 0, 0, 1, 4
 [node name="Camera" parent="CameraRotation" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 0.939136, 0.343545, 0, -0.343545, 0.939136, 0, 7.47481, 15.122 )
 
-[node name="RigidBody" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 0.384924, -0.922948, 0, 0.922948, 0.384924, 0, 6.98303, 0 )
+[node name="StaticBody" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7063, 0, 0 )

@@ -8,5 +8,9 @@ namespace WobblyTower.Constants
         public static string Move {get;} = "Move";
         public static string ZoomIn {get;} = "ZoomIn";
         public static string ZoomOut {get;} = "ZoomOut";
+        public static string BlockRotateUp {get;} = "BlockRotateUp";
+        public static string BlockRotateDown {get;} = "BlockRotateDown";
+        public static string BlockRotateLeft {get;} = "BlockRotateLeft";
+        public static string BlockRotateRight {get;} = "BlockRotateRight";
     }
 }

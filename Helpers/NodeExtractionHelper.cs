@@ -19,5 +19,28 @@ namespace WobblyTower.Helpers
 
 			throw new NullReferenceException();
 		}
+
+		public static T GetParent<T>(Node instance)
+		{
+			var iterations = 0;
+
+			while (true && iterations < 10)
+			{
+				instance = instance.GetParent();
+
+				if (instance is T correctParent)
+				{
+					return correctParent;
+				}
+				else if (instance == null)
+				{
+					throw new NullReferenceException("Parent could not be found");
+				}
+
+				iterations++;
+			}
+
+			throw new NullReferenceException("Parent could not be found");
+		}
 	}
 }
